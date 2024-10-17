@@ -2,15 +2,16 @@
 
 import { useState } from "react";
 import { downloadFile } from "~/lib/downloadFile";
-import { exportPayments } from "./exportPayments";
 
 export default function Home() {
   const [date, setDate] = useState("");
 
   const handleExportPayments = async () => {
-    const payments = await exportPayments(date);
+    const invoices = await fetch(`/api/payments?day=${date}`).then((response) =>
+      response.json(),
+    );
 
-    console.log(payments);
+    console.log(invoices);
   };
 
   const handleDownloadInvoices = async () => {

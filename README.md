@@ -1,6 +1,6 @@
 # stripe-exporter
 
-Simple tool for exporting Stripe payments in format that I needed. Written using Next.js' server actions.
+Simple tool for exporting Stripe payments in format that I needed. Written using Next.js server routes.
 
 ## Getting started
 
