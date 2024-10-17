@@ -2,14 +2,20 @@ import { createZipFile } from "~/lib/createZipFile";
 
 import { getInvoicesForDay } from "~/lib/getInvoicesForDay";
 
-export async function GET() {
-  const invoices = await getInvoicesForDay(new Date("2024-10-15"));
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const day = searchParams.get("day");
+
+  if (!day) {
+    return new Response("day param missing", { status: 404 });
+  }
+
+  const invoices = await getInvoicesForDay(new Date(day));
 
   const zipFileContent = invoices.map((invoice) => ({
     buffer: Buffer.from(invoice.arrayBuffer),
     name: `${invoice.number}.pdf`,
   }));
-
   const zipFile = await createZipFile(zipFileContent);
 
   const headers = new Headers();
