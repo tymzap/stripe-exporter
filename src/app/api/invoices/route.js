@@ -1,6 +1,4 @@
-import { createZipFile } from "~/lib/createZipFile";
-
-import { getInvoicesForDay } from "~/lib/getInvoicesForDay";
+import { prepareZipFile } from "./prepareZipFile";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -10,19 +8,12 @@ export async function GET(request) {
     return new Response("day param missing", { status: 404 });
   }
 
-  const invoices = await getInvoicesForDay(new Date(day));
-
-  const zipFileContent = invoices.map((invoice) => ({
-    buffer: Buffer.from(invoice.arrayBuffer),
-    name: `${invoice.number}.pdf`,
-  }));
-  const zipFile = await createZipFile(zipFileContent);
+  const zipFileStream = await prepareZipFile(day);
 
   const headers = new Headers();
   headers.set("Content-Type", "application/zip");
-  headers.set("Content-Disposition", 'attachment; filename="invoices.zip"');
 
-  return new Response(zipFile, {
+  return new Response(zipFileStream, {
     status: 200,
     statusText: "OK",
     headers,

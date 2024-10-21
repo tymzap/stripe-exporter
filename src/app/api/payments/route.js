@@ -1,6 +1,4 @@
-import { NextResponse } from "next/server";
-
-import { getPaymentsForDay } from "~/lib/getPaymentsForDay";
+import { preparePdfFile } from "./preparePdfFile";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -10,7 +8,14 @@ export async function GET(request) {
     return new Response("day param missing", { status: 404 });
   }
 
-  const paymentsForDay = await getPaymentsForDay(new Date(day));
+  const pdfBuffer = await preparePdfFile(day);
 
-  return NextResponse.json(paymentsForDay);
+  const headers = new Headers();
+  headers.set("Content-Type", "application/pdf");
+
+  return new Response(pdfBuffer, {
+    status: 200,
+    statusText: "OK",
+    headers,
+  });
 }

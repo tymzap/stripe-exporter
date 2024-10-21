@@ -1,4 +1,6 @@
 import { getDayTimestampRange } from "~/lib/getDayTimestampRange";
+import { unixTimestampToDate } from "~/lib/unixTimestampToDate";
+import { formatDateTime } from "~/lib/formatDateTime";
 import { Stripe } from "~/lib/stripe";
 
 export async function getPaymentsForDay(day) {
@@ -15,12 +17,18 @@ export async function getPaymentsForDay(day) {
 }
 
 function transformPayments(payments) {
-  return payments.map((payment) => ({
-    createdAt: new Date(payment.created * 1000).toLocaleDateString("pl-PL"),
-    amount: payment.amount / 100,
-    currency: payment.currency.toUpperCase(),
-    invoiceNumber: payment.invoice?.number,
-    customerName: payment.invoice?.customer_name,
-    customerCountry: payment.invoice?.customer_address?.country,
-  }));
+  return payments.map((payment) => {
+    const createdAt = formatDateTime(unixTimestampToDate(payment.created));
+    const amount = payment.amount / 100;
+    const currency = payment.currency.toUpperCase();
+
+    return {
+      createdAt,
+      amount,
+      currency,
+      invoiceNumber: payment.invoice?.number,
+      customerName: payment.invoice?.customer_name,
+      customerCountry: payment.invoice?.customer_address?.country,
+    };
+  });
 }

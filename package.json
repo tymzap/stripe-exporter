@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "archiver": "^7.0.1",
+    "emitter": "^0.0.5",
+    "html-pdf-node": "^1.0.8",
     "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",
@@ -17,6 +19,7 @@
   },
   "devDependencies": {
     "@types/archiver": "6.0.2",
+    "@types/html-pdf-node": "^1.0.2",
     "eslint": "^8",
     "eslint-config-next": "14.2.15",
     "eslint-config-prettier": "9.1.0",

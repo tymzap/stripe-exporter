@@ -1,41 +1,30 @@
 "use client";
 
-import { useState } from "react";
-import { downloadFile } from "~/lib/downloadFile";
+import { useHome } from "./useHome";
 
 export default function Home() {
-  const [date, setDate] = useState("");
-
-  const handleExportPayments = async () => {
-    const invoices = await fetch(`/api/payments?day=${date}`).then((response) =>
-      response.json(),
-    );
-
-    console.log(invoices);
-  };
-
-  const handleDownloadInvoices = async () => {
-    const invoices = await fetch(`/api/invoices?day=${date}`).then((response) =>
-      response.blob(),
-    );
-
-    downloadFile(invoices, "invoices.zip");
-  };
-
-  const handleChangeDate = (event) => {
-    const value = event.target.value;
-
-    setDate(value);
-  };
+  const {
+    handleChangeDate,
+    handleExportInvoices,
+    handleExportPayments,
+    isInvoiceExportDisabled,
+    isPaymentExportDisabled,
+    date,
+  } = useHome();
 
   return (
     <>
-      <input type="date" onChange={handleChangeDate} value={date} />
-      <button onClick={handleExportPayments} disabled={!Boolean(date)}>
+      <label>
+        Date:
+        <br />
+        <input type="date" onChange={handleChangeDate} value={date} />
+      </label>
+      <hr />
+      <button onClick={handleExportPayments} disabled={isPaymentExportDisabled}>
         Export payments
-      </button>
-      <button onClick={handleDownloadInvoices} disabled={!Boolean(date)}>
-        Download invoices
+      </button>{" "}
+      <button onClick={handleExportInvoices} disabled={isInvoiceExportDisabled}>
+        Export invoices
       </button>
     </>
   );
