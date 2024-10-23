@@ -4,21 +4,36 @@ import { useHome } from "./useHome";
 
 export default function Home() {
   const {
-    handleChangeDate,
+    startDate,
+    endDate,
+    handleChangeStartDate,
+    handleChangeEndDate,
     handleExportInvoices,
     handleExportPayments,
     isInvoiceExportDisabled,
     isPaymentExportDisabled,
-    date,
   } = useHome();
 
   return (
     <>
-      <label>
-        Date:
-        <br />
-        <input type="date" onChange={handleChangeDate} value={date} />
-      </label>
+      <div>
+        <label>
+          Start date (or date for payments):
+          <br />
+          <input
+            type="date"
+            onChange={handleChangeStartDate}
+            value={startDate}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          End date:
+          <br />
+          <input type="date" onChange={handleChangeEndDate} value={endDate} />
+        </label>
+      </div>
       <hr />
       <button onClick={handleExportPayments} disabled={isPaymentExportDisabled}>
         Export payments

@@ -1,8 +1,8 @@
-import { getInvoicesForDay } from "~/lib/getInvoicesForDay";
+import { getInvoicesForDateRange } from "~/lib/getInvoicesForDateRange";
 import { createZipFile } from "~/lib/createZipFile";
 
-export async function prepareZipFile(day) {
-  const invoices = await getInvoicesForDay(new Date(day));
+export async function prepareZipFile(startDate, endDate) {
+  const invoices = await getInvoicesForDateRange(startDate, endDate);
 
   const content = invoices.map((invoice) => ({
     buffer: Buffer.from(invoice.arrayBuffer),

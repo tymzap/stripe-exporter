@@ -1,8 +1,7 @@
 import { preparePdfFile } from "./preparePdfFile";
 
 export async function GET(request) {
-  const { searchParams } = new URL(request.url);
-  const day = searchParams.get("day");
+  const day = request.nextUrl.searchParams.get("startDate");
 
   if (!day) {
     return new Response("day param missing", { status: 404 });

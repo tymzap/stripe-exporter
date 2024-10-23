@@ -2,37 +2,55 @@ import { useState } from "react";
 import { downloadFile } from "~/lib/downloadFile";
 
 export function useHome() {
-  const [date, setDate] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  const handleChangeStartDate = (event) => {
+    const newStartDate = event.target.value;
+
+    setStartDate(newStartDate);
+  };
+  const handleChangeEndDate = (event) => {
+    const newEndDate = event.target.value;
+
+    setEndDate(newEndDate);
+  };
+
+  const isPaymentExportDisabled = !Boolean(startDate);
+  const isInvoiceExportDisabled = !Boolean(startDate) || !Boolean(endDate);
 
   const handleExportPayments = async () => {
-    const payments = await fetch(`/api/payments?day=${date}`).then((response) =>
-      response.blob(),
-    );
+    const payments = await getPayments(startDate);
 
     downloadFile(payments, "payments.pdf");
   };
 
   const handleExportInvoices = async () => {
-    const invoices = await fetch(`/api/invoices?day=${date}`).then((response) =>
-      response.blob(),
-    );
+    const invoices = await getInvoices(startDate, endDate);
 
     downloadFile(invoices, "invoices.zip");
   };
 
-  const handleChangeDate = (event) => {
-    setDate(event.target.value);
-  };
-
-  const isPaymentExportDisabled = !Boolean(date);
-  const isInvoiceExportDisabled = !Boolean(date);
-
   return {
-    date,
+    startDate,
+    endDate,
+    handleChangeStartDate,
+    handleChangeEndDate,
     handleExportPayments,
     handleExportInvoices,
-    handleChangeDate,
     isPaymentExportDisabled,
     isInvoiceExportDisabled,
   };
+}
+
+async function getPayments(day) {
+  return await fetch(`/api/payments?day=${day}`).then((response) =>
+    response.blob(),
+  );
+}
+
+async function getInvoices(startDate, endDate) {
+  return await fetch(
+    `/api/invoices?startDate=${startDate}&endDate=${endDate}`,
+  ).then((response) => response.blob());
 }
