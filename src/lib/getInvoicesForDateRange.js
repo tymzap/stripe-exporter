@@ -1,5 +1,5 @@
 import { getDateRangeBoundaryTimestamps } from "./getDateRangeBoundaryTimestamps";
-import { Stripe } from "~/lib/stripe";
+import { stripe } from "~/lib/stripe";
 
 export async function getInvoicesForDateRange(startDate, endDate) {
   const [startTimestamp, endTimestamp] = getDateRangeBoundaryTimestamps(
@@ -7,10 +7,10 @@ export async function getInvoicesForDateRange(startDate, endDate) {
     endDate,
   );
 
-  const query = `status:"succeeded" AND created>${startTimestamp - 1} AND created<${endTimestamp + 1}`;
+  const query = `status:"succeeded" AND created>${startTimestamp} AND created<${endTimestamp}`;
 
-  // todo implement paginating over results when `has_more` from the response is `true`
-  const { data: payments } = await Stripe.paymentIntents.search({
+  // todo implement paginating over results until `has_more` from the response is `true`
+  const { data: payments } = await stripe.paymentIntents.search({
     query,
     expand: ["data.invoice"],
     limit: PAYMENTS_LIMIT,

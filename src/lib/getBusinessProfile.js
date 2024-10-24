@@ -1,7 +1,7 @@
-import { Stripe } from "~/lib/stripe";
+import { stripe } from "~/lib/stripe";
 
 export async function getBusinessProfile() {
-  const account = await Stripe.accounts.retrieve();
+  const account = await stripe.accounts.retrieve();
 
   return {
     name: account.business_profile.name,

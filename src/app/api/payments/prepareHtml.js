@@ -45,7 +45,7 @@ function prepareSummaryRow(paymentsForDay) {
   );
   const currency = paymentsForDay[0].currency;
 
-  const text = `Suma: ${sum} ${currency}`;
+  const text = `Suma: ${sum.toFixed(2)} ${currency}`;
   const columnsCount = Object.keys(paymentsForDay[0]).length;
 
   return `<tr><td colspan="${columnsCount}"><strong>${text}</strong></td></tr>`;

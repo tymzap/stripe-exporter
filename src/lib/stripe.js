@@ -1,3 +1,3 @@
-import setupStripe from "stripe";
+import Stripe from "stripe";
 
-export const Stripe = setupStripe(process.env.STRIPE_PRIVATE_KEY);
+export const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);

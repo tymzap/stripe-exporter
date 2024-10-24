@@ -16,13 +16,13 @@ export function useHome() {
     setEndDate(newEndDate);
   };
 
-  const isPaymentExportDisabled = !Boolean(startDate);
+  const isPaymentExportDisabled = !Boolean(startDate) || !Boolean(endDate);
   const isInvoiceExportDisabled = !Boolean(startDate) || !Boolean(endDate);
 
   const handleExportPayments = async () => {
-    const payments = await getPayments(startDate);
+    const payments = await getPayments(startDate, endDate);
 
-    downloadFile(payments, "payments.pdf");
+    downloadFile(payments, "payments.zip");
   };
 
   const handleExportInvoices = async () => {
@@ -43,10 +43,10 @@ export function useHome() {
   };
 }
 
-async function getPayments(day) {
-  return await fetch(`/api/payments?day=${day}`).then((response) =>
-    response.blob(),
-  );
+async function getPayments(startDate, endDate) {
+  return await fetch(
+    `/api/payments?startDate=${startDate}&endDate=${endDate}`,
+  ).then((response) => response.blob());
 }
 
 async function getInvoices(startDate, endDate) {

@@ -18,7 +18,7 @@ export default function Home() {
     <>
       <div>
         <label>
-          Start date (or date for payments):
+          Start date
           <br />
           <input
             type="date"
