@@ -4,6 +4,9 @@ import { downloadFile } from "~/lib/downloadFile";
 export function useHome() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [invoiceFilename, setInvoiceFilename] = useState(
+    INITIAL_INVOICE_FILENAME,
+  );
 
   const handleChangeStartDate = (event) => {
     const newStartDate = event.target.value;
@@ -15,9 +18,15 @@ export function useHome() {
 
     setEndDate(newEndDate);
   };
+  const handleChangeInvoiceFilename = (event) => {
+    const newInvoiceFilename = event.target.value;
+
+    setInvoiceFilename(newInvoiceFilename);
+  };
 
   const isPaymentExportDisabled = !Boolean(startDate) || !Boolean(endDate);
-  const isInvoiceExportDisabled = !Boolean(startDate) || !Boolean(endDate);
+  const isInvoiceExportDisabled =
+    !Boolean(startDate) || !Boolean(endDate) || !Boolean(invoiceFilename);
 
   const handleExportPayments = async () => {
     const payments = await getPayments(startDate, endDate);
@@ -26,7 +35,7 @@ export function useHome() {
   };
 
   const handleExportInvoices = async () => {
-    const invoices = await getInvoices(startDate, endDate);
+    const invoices = await getInvoices(startDate, endDate, invoiceFilename);
 
     downloadFile(invoices, "invoices.zip");
   };
@@ -34,8 +43,10 @@ export function useHome() {
   return {
     startDate,
     endDate,
+    invoiceFilename,
     handleChangeStartDate,
     handleChangeEndDate,
+    handleChangeInvoiceFilename,
     handleExportPayments,
     handleExportInvoices,
     isPaymentExportDisabled,
@@ -49,8 +60,10 @@ async function getPayments(startDate, endDate) {
   ).then((response) => response.blob());
 }
 
-async function getInvoices(startDate, endDate) {
+async function getInvoices(startDate, endDate, invoiceFilename) {
   return await fetch(
-    `/api/invoices?startDate=${startDate}&endDate=${endDate}`,
+    `/api/invoices?startDate=${startDate}&endDate=${endDate}&invoiceFilename=${invoiceFilename}`,
   ).then((response) => response.blob());
 }
+
+const INITIAL_INVOICE_FILENAME = "Faktura {number}";

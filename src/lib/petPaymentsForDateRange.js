@@ -26,9 +26,12 @@ function normalizePayment(payment) {
     amount: payment.amount,
     currency: payment.currency,
     invoiceNumber: payment.invoice?.number,
-    customerName: payment.invoice?.customer_name,
-    customerCountry: payment.invoice?.customer_address?.country,
+    customerName:
+      payment.invoice?.customer_name ?? payment.invoice?.customer_email,
+    customerCountry: payment.invoice?.customer_address?.country ?? EMPTY_VALUE,
   };
 }
 
 const PAYMENTS_LIMIT = 100;
+
+const EMPTY_VALUE = "-";

@@ -8,10 +8,12 @@ export default function Home() {
     endDate,
     handleChangeStartDate,
     handleChangeEndDate,
+    handleChangeInvoiceFilename,
     handleExportInvoices,
     handleExportPayments,
     isInvoiceExportDisabled,
     isPaymentExportDisabled,
+    invoiceFilename,
   } = useHome();
 
   return (
@@ -34,6 +36,8 @@ export default function Home() {
           <input type="date" onChange={handleChangeEndDate} value={endDate} />
         </label>
       </div>
+      <div>Invoice file name:</div>
+      <input value={invoiceFilename} onChange={handleChangeInvoiceFilename} />
       <hr />
       <button onClick={handleExportPayments} disabled={isPaymentExportDisabled}>
         Export payments
