@@ -66,4 +66,4 @@ async function getInvoices(startDate, endDate, invoiceFilename) {
   ).then((response) => response.blob());
 }
 
-const INITIAL_INVOICE_FILENAME = "Faktura {number}";
+const INITIAL_INVOICE_FILENAME = "Faktura {number} ({product})";
